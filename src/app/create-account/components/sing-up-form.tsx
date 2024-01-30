@@ -1,26 +1,16 @@
 'use client'
+import { createUserWithEmailAndPassword, getAuth, updateProfile } from "firebase/auth";
 import React, { useState } from 'react';
-import { initializeApp } from "firebase/app";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 
-const firebaseConfig = {
-    apiKey: "AIzaSyAitBlJOWuWC-z0W65yCo5zY7kQFqUkwRQ",
-    authDomain: "web-test-dev-dfea5.firebaseapp.com",
-    databaseURL: "https://web-test-dev-dfea5-default-rtdb.firebaseio.com",
-    projectId: "web-test-dev-dfea5",
-    storageBucket: "web-test-dev-dfea5.appspot.com",
-    messagingSenderId: "1076211341796",
-    appId: "1:1076211341796:web:01f796e14e1724fbf90ff1"
-};
-  
 
-const app = initializeApp(firebaseConfig);
+
 
 export default function FormCreate() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [displayName, setDisplayName] = useState('');
 
-    const handleSubmit = async (e: { preventDefault: () => void; }) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -29,13 +19,19 @@ export default function FormCreate() {
             alert('Por favor, insira um email válido.');
             return;
         }
-
         const auth = getAuth();
+
         try {
-            await createUserWithEmailAndPassword(auth, email, password);
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+
+            await updateProfile(userCredential.user, {
+                displayName: displayName
+            });
+
             alert('Conta criada com sucesso!');
             setEmail('');
             setPassword('');
+            setDisplayName('');
         } catch (error) {
             alert([error]);
         }
@@ -56,6 +52,20 @@ export default function FormCreate() {
                         </div>
                         <form onSubmit={handleSubmit}>
                             <div className="mt-5">
+                                <label
+                                    className="font-semibold text-sm text-gray-600 pb-1 block"
+                                    htmlFor="displayName"
+                                >
+                                    Nome do Usuário
+                                </label>
+                                <input
+                                    className="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full"
+                                    type="text"
+                                    id="displayName"
+                                    value={displayName}
+                                    onChange={(e) => setDisplayName(e.target.value)}
+                                    required
+                                />
                                 <label
                                     className="font-semibold text-sm text-gray-600 pb-1 block"
                                     htmlFor="login"
