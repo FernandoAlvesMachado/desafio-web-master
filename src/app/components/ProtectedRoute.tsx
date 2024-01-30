@@ -2,6 +2,7 @@
 import { useEffect } from 'react';
 import Link from 'next/link';
 import { useAuth } from '../utils/auth';
+import React from 'react';
 
 const ProtectedRoute = ({ children }) => {
     const { user, loading } = useAuth();

@@ -5,6 +5,7 @@ import SideBar from '../components/SideBar';
 import AddActivity from '../components/AddActivity';
 import ShowEditActivity from '../components/ShowEditActivity';
 import { auth } from '../api/auth/firebase-config.js';
+import { Metadata } from 'next';
 
 const HomePage = () => {
     const { user, loading } = useAuth();
@@ -16,6 +17,7 @@ const HomePage = () => {
         }
     }, [user, loading]);
 
+
     const handleActivityAdded = () => {
         setRefreshActivities(!refreshActivities);
     };
@@ -25,7 +27,7 @@ const HomePage = () => {
     }
 
     return (
-        <div className='flex'>
+        <div className='flex transition-all'>
             <SideBar />
             <div className='flex w-full h-screen bg-gray-800 justify-center text-slate-50 items-center'>
                 <div className='flex h-full w-full text-slate-950 items-center justify-center gap-7'>
